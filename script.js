@@ -141,19 +141,19 @@ upBtn.addEventListener('click', () => {
 rightBtn.addEventListener('click', () => {
     console.log("right")
 
-    movement((currentXPos + 1), currentYPos)
+    test((currentXPos + 1), currentYPos)
 })
 
 downBtn.addEventListener('click', () => {
     console.log("down")
 
-    movement(currentXPos, (currentYPos + 1))
+    test(currentXPos, (currentYPos + 1))
 })
 
 leftBtn.addEventListener('click', () => {
     console.log("left")
 
-    movement((currentXPos - 1), currentYPos)
+    test((currentXPos - 1), currentYPos)
 })
 
 function cooldown() {
