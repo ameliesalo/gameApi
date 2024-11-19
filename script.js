@@ -62,7 +62,7 @@ async function getCharacter() {
 }
 getCharacter()
 
-async function test() {
+/*async function test() {
   let myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
   myHeaders.append("Content-Type", "application/json");
@@ -92,7 +92,7 @@ async function test() {
   console.log(data);
 }
 
-test();
+test();*/
 
 async function movement() {
       
@@ -104,7 +104,7 @@ async function movement() {
       Accept: 'application/json',
       Authorization: 'Bearer ' + token
     },
-    body: `{"x":${currentXPos},"y":${currentYPos}}`//change the position here
+    body: `{"x":${currentXPos}},"y":${currentYPos}}`//change the position here
   };
   
   try {
@@ -112,8 +112,6 @@ async function movement() {
     const { data } = await response.json()
 
     console.log(data)
-
-    console.log(`x: ${data.data.x}, y: ${data.data.y}`)
 
     currentXPos = data.data.destination.x
     currentYPos = data.data.destination.y
@@ -135,13 +133,13 @@ async function movement() {
 upBtn.addEventListener('click', () => {
     console.log("up")
 
-    test(currentXPos, (currentYPos - 1))
+    movement(currentXPos, (currentYPos - 1))
 })
 
 rightBtn.addEventListener('click', () => {
     console.log("right")
 
-    test((currentXPos + 1), currentYPos)
+    movement((currentXPos + 1), currentYPos)
 })
 
 downBtn.addEventListener('click', () => {
