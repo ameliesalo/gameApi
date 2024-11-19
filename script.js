@@ -64,7 +64,7 @@ getCharacter()
 
 async function movement() {
       
-  const url = server + '/my/' + character +'/action/move'
+  const url = server + `/my/` + character +`/action/move`
   const options = {
     method: 'POST',
     headers: {
@@ -77,7 +77,7 @@ async function movement() {
   
   try {
     const response = await fetch (url, options)
-    const  data  = await response.json()
+    const { data } = await response.json()
 
     console.log(data)
 
