@@ -18,11 +18,11 @@ const yPlace = document.querySelector('.y-place')
 //Use node index.js in the terminal for execute the script.
 //Warning: Firefox does not fully support the editor. Please use a chromimum-based web browser such as Chrome, Brave or Edge.
 //This script is a basic example of a player's movement. You can load other examples by clicking on "Load example".
-const server = "https://api.artifactsmmo.com";
+const server = "https://api.artifactsmmo.com"
 //Your token is automatically set
-const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFtZWxpZS5zYWxvbW9uc3NvbnNAZ21haWwuY29tIiwicGFzc3dvcmRfY2hhbmdlZCI6IiJ9.eG8GdAoKDzCYxet_fp4tq_L1cidgEfwiwD4aWY_OOAk";
+const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFtZWxpZS5zYWxvbW9uc3NvbnNAZ21haWwuY29tIiwicGFzc3dvcmRfY2hhbmdlZCI6IiJ9.eG8GdAoKDzCYxet_fp4tq_L1cidgEfwiwD4aWY_OOAk"
 //Put your character name here
-const character = "mamelie";
+const character = "mamelie"
 
 // Character variables
 let currentXPos = 0
@@ -62,9 +62,41 @@ async function getCharacter() {
 }
 getCharacter()
 
+async function test() {
+  let myHeaders = new Headers();
+  myHeaders.append("Accept", "application/json");
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append(
+      "Authorization",
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFtZWxpZS5zYWxvbW9uc3NvbnNAZ21haWwuY29tIiwicGFzc3dvcmRfY2hhbmdlZCI6IiJ9.eG8GdAoKDzCYxet_fp4tq_L1cidgEfwiwD4aWY_OOAk"
+  );
+
+  let raw = JSON.stringify({
+      x: 1,
+      y: 1,
+  });
+
+  console.log(raw)
+  let requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+  };
+
+  const response = await fetch(
+      "https://api.artifactsmmo.com/my/" + character + "/action/move",
+      requestOptions
+  );
+  const data = await response.json();
+  console.log(data);
+}
+
+test();
+
 async function movement() {
       
-  const url = server + `/my/` + character +`/action/move`
+  const url = server + '/my/' + character +'/action/move'
   const options = {
     method: 'POST',
     headers: {
@@ -103,7 +135,7 @@ async function movement() {
 upBtn.addEventListener('click', () => {
     console.log("up")
 
-    movement(currentXPos, (currentYPos - 1))
+    test(currentXPos, (currentYPos - 1))
 })
 
 rightBtn.addEventListener('click', () => {
@@ -124,18 +156,6 @@ leftBtn.addEventListener('click', () => {
     movement((currentXPos - 1), currentYPos)
 })
 
-const gatherRepeat = () => {
-    console.log('repeat gathering')
-    gather()
-    setInterval(gather, 30000)
-}
-
-restBtn.addEventListener('click', rest)
-fightBtn.addEventListener('click', fight)
-gatherBtn.addEventListener('click', gather)
-
-
-
 function cooldown() {
     cooldownEl.innerText = `chilling for: ${cooldownTimer} seconds`
     if(cooldownTimer > 0) {
@@ -148,12 +168,6 @@ function cooldown() {
         console.log("let's go!")
     }
 }
-
-
-
-
-
-
 
 async function rest() {
     const url = server + '/my/' + character +'/action/rest'
@@ -240,3 +254,7 @@ async function gather() {
         console.log(error)
     }
 }
+
+restBtn.addEventListener('click', rest)
+fightBtn.addEventListener('click', fight)
+gatherBtn.addEventListener('click', gather)
