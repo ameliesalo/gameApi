@@ -3,9 +3,13 @@ const rightBtn = document.querySelector('.right-btn')
 const downBtn = document.querySelector('.down-btn')
 const leftBtn = document.querySelector('.left-btn')
 
+const copperMineBtn = document.querySelector('.copper-mine')
+const craftCottageBtn = document.querySelector('.craft-cottage')
+
 const restBtn = document.querySelector('.rest')
 const fightBtn = document.querySelector('.fight')
 const gatherBtn = document.querySelector('.gather')
+const craftBtn = document.querySelector('.craft')
 
 const characterName = document.querySelector('.name')
 const cooldownEl = document.querySelector('.cooldownTimer')
@@ -62,39 +66,8 @@ async function getCharacter() {
 }
 getCharacter()
 
-/*async function test() {
-  let myHeaders = new Headers();
-  myHeaders.append("Accept", "application/json");
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append(
-      "Authorization",
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFtZWxpZS5zYWxvbW9uc3NvbnNAZ21haWwuY29tIiwicGFzc3dvcmRfY2hhbmdlZCI6IiJ9.eG8GdAoKDzCYxet_fp4tq_L1cidgEfwiwD4aWY_OOAk"
-  );
-
-  let raw = JSON.stringify({
-      x: 1,
-      y: 1,
-  });
-
-  console.log(raw)
-  let requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-  };
-
-  const response = await fetch(
-      "https://api.artifactsmmo.com/my/" + character + "/action/move",
-      requestOptions
-  );
-  const data = await response.json();
-  console.log(data);
-}
-
-test();*/
-
-async function movement() {
+ 
+async function movement(currentXPos, currentYPos) {
       
   const url = server + '/my/' + character +'/action/move'
   const options = {
@@ -104,7 +77,7 @@ async function movement() {
       Accept: 'application/json',
       Authorization: 'Bearer ' + token
     },
-    body: `{"x":${currentXPos}},"y":${currentYPos}}`//change the position here
+    body: `{"x":${currentXPos},"y":${currentYPos}}`//change the position here
   };
   
   try {
@@ -133,25 +106,29 @@ async function movement() {
 upBtn.addEventListener('click', () => {
     console.log("up")
 
-    movement(currentXPos, (currentYPos - 1))
+    movement(currentYPos, (currentYPos - 1))
+    getCharacter()
 })
 
 rightBtn.addEventListener('click', () => {
     console.log("right")
 
     movement((currentXPos + 1), currentYPos)
+    getCharacter()
 })
 
 downBtn.addEventListener('click', () => {
     console.log("down")
 
-    test(currentXPos, (currentYPos + 1))
+    movement(currentYPos, (currentYPos + 1))
+    getCharacter()
 })
 
 leftBtn.addEventListener('click', () => {
     console.log("left")
 
-    test((currentXPos - 1), currentYPos)
+    movement((currentXPos - 1), currentYPos)
+    getCharacter()
 })
 
 function cooldown() {
@@ -253,6 +230,38 @@ async function gather() {
     }
 }
 
+ async function craft () {
+  const url = server + '/my/' + character + '/action/crafting'
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Constent-Type' : 'application/json',
+      Accept: 'application/json',
+      Authorization: 'Bearer' + token
+    },
+    body: {
+      "code": "copper",
+      "quantity": 1
+  }
+}
+  try {
+    const response = await fetch(url, options)
+    const data = await response.json()
+
+    cooldownTimer = data.data.cooldown.remaining_seconds
+    
+    if(cooldownTimer > 0){
+      cooldown()
+    }
+  }catch (error){
+  console.log(error)
+  }
+}
 restBtn.addEventListener('click', rest)
 fightBtn.addEventListener('click', fight)
-gatherBtn.addEventListener('click', gather)
+gatherBtn.addEventListener('click',gather)
+craftBtn.addEventListener('click',craft)
+
+copperMineBtn.addEventListener('click', () => movement(2,0))
+craftCottageBtn.addEventListener('click', () => movement(1,5))
